@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetroChat — The Modular Cross-Platform Messenger</title>
+  <style>
+    /* Base Setup */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #0F1015; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+
+    /* Header */
+    header { width: 100%; max-width: 1100px; padding: 25px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.6rem; font-weight: 800; color: #00B0FF; letter-spacing: 1px; }
+    .nav-links a { color: #A0A5B5; text-decoration: none; margin-left: 24px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: #FFFFFF; }
+
+    /* Hero */
+    .hero { text-align: center; margin: 50px 20px 30px; max-width: 800px; }
+    .hero h1 { font-size: 3.2rem; font-weight: 800; margin-bottom: 20px; background: linear-gradient(90deg, #00B0FF, #00E676); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 1.25rem; color: #A0A5B5; line-height: 1.6; margin-bottom: 30px; }
+
+    .cta-buttons { display: flex; gap: 16px; justify-content: center; }
+    .btn { padding: 14px 30px; border-radius: 8px; font-weight: 600; text-decoration: none; transition: transform 0.2s, background 0.2s; cursor: pointer; border: none; font-size: 1rem; }
+    .btn-primary { background: #00B0FF; color: #000; }
+    .btn-primary:hover { background: #0081CB; transform: translateY(-2px); }
+    .btn-secondary { background: #23272A; color: #FFF; border: 1px solid #3A3F47; }
+    .btn-secondary:hover { background: #2C3036; transform: translateY(-2px); }
+
+    /* Theme Interactive Demo Box */
+    .demo-container { width: 92%; max-width: 900px; background: #16181E; border: 1px solid #2B2E38; border-radius: 12px; padding: 24px; margin: 40px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .demo-title { text-align: center; margin-bottom: 15px; color: #A0A5B5; font-size: 1.1rem; }
+    .controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .theme-btn { padding: 8px 18px; border-radius: 6px; background: #23272A; border: 1px solid #3A3F47; color: #FFF; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
+    .theme-btn.active { border-color: #00B0FF; background: #00B0FF22; color: #00B0FF; }
+
+    /* App Preview Container */
+    .app-preview { height: 350px; border-radius: 8px; display: flex; overflow: hidden; transition: all 0.3s ease; }
+
+    /* PRESET 1: Default Modern Dark */
+    .theme-default { background: #1E1F22; color: #E0E0E0; font-family: sans-serif; }
+    .theme-default .sidebar { width: 220px; background: #2B2D31; padding: 15px; border-right: 1px solid #35373C; }
+    .theme-default .chat { flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+    .theme-default .bubble { background: #383A40; padding: 10px 14px; border-radius: 8px; margin-bottom: 10px; width: fit-content; }
+
+    /* PRESET 2: Skype 2008 Classic */
+    .theme-skype { background: #FFFFFF; color: #000000; font-family: 'Tahoma', sans-serif; }
+    .theme-skype .sidebar { width: 220px; background: #EAF4FC; padding: 15px; border-right: 2px solid #BCE0FD; }
+    .theme-skype .chat { flex: 1; padding: 20px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; }
+    .theme-skype .bubble { background: #D9EFFF; border: 1px solid #99CEFF; padding: 8px 12px; border-radius: 4px; margin-bottom: 10px; color: #003366; width: fit-content; }
+
+    /* PRESET 3: MSN Messenger 2005 */
+    .theme-msn { background: #F0F4F8; color: #000; font-family: 'Comic Sans MS', 'Arial', sans-serif; }
+    .theme-msn .sidebar { width: 220px; background: linear-gradient(180deg, #8EB8E5, #4A90E2); padding: 15px; color: #FFF; }
+    .theme-msn .chat { flex: 1; padding: 20px; background: #FFF; border: 2px solid #4A90E2; display: flex; flex-direction: column; justify-content: space-between; }
+    .theme-msn .bubble { background: #FFF9D7; border: 1px solid #E6D076; padding: 8px; border-radius: 2px; margin-bottom: 10px; color: #333; width: fit-content; }
+
+    /* PRESET 4: AIM 2000 Retro */
+    .theme-aim { background: #C0C0C0; color: #000; font-family: 'Times New Roman', serif; }
+    .theme-aim .sidebar { width: 220px; background: #D4D0C8; padding: 15px; border-right: 2px solid #808080; }
+    .theme-aim .chat { flex: 1; padding: 20px; background: #FFF; border: 2px inset #FFF; display: flex; flex-direction: column; justify-content: space-between; }
+    .theme-aim .bubble { background: #ECE9D8; border: 1px solid #7F9DB9; padding: 6px 10px; border-radius: 0px; margin-bottom: 10px; width: fit-content; }
+
+    /* Footer */
+    footer { margin-top: auto; padding: 30px; color: #5F6473; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">RETROCHAT</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#demo">Skin Engine</a>
+      <a href="https://github.com/woistat/RetroChat" target="_blank">GitHub</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Nostalgic Vibes. Modern Speed.</h1>
+    <p>Open-source modular chat application. Swap sound packs, custom themes (Skype, MSN, AIM, ICQ, Discord), and enjoy uncompressed 1080p 60FPS screen sharing.</p>
+    <div class="cta-buttons">
+      <a href="https://github.com/woistat/RetroChat" class="btn btn-primary" target="_blank">View on GitHub</a>
+      <a href="#demo" class="btn btn-secondary">Try Theme Preview</a>
+    </div>
+  </section>
+
+  <!-- Interactive Live Theme Swapper -->
+  <div class="demo-container" id="demo">
+    <div class="demo-title">Live Skin Swapper Engine Preview</div>
+    <div class="controls">
+      <button class="theme-btn active" onclick="setTheme('default', event)">Modern Dark</button>
+      <button class="theme-btn" onclick="setTheme('skype', event)">Skype 2008</button>
+      <button class="theme-btn" onclick="setTheme('msn', event)">MSN 2005</button>
+      <button class="theme-btn" onclick="setTheme('aim', event)">AIM 2000</button>
+    </div>
+
+    <div id="appMockup" class="app-preview theme-default">
+      <div class="sidebar">
+        <h4 style="margin-bottom: 12px;">Friends List</h4>
+        <p>🟢 Grandma</p>
+        <p>🔴 Homie_21</p>
+      </div>
+      <div class="chat">
+        <div>
+          <div class="bubble"><strong>Grandma:</strong> Hello dear, is the screen share working?</div>
+          <div class="bubble"><strong>You:</strong> Yep! Smooth 1080p 60FPS right now.</div>
+        </div>
+        <input type="text" placeholder="Type a message..." style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #555;" disabled>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 RetroChat Open Source Project (GPL-3.0). Built for Windows, macOS, and Linux.</p>
+  </footer>
+
+  <script>
+    function setTheme(themeName, evt) {
+      const mockup = document.getElementById('appMockup');
+      const buttons = document.querySelectorAll('.theme-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      evt.target.classList.add('active');
+      mockup.className = 'app-preview theme-' + themeName;
+    }
+  </script>
+</body>
+</html>
